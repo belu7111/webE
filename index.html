@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Regisztráció</title>
+</head>
+<body>
+    <h1>Regisztrációs űrlap</h1>
+    <form action="/submit" method="post">
+        <label for="name">Név:</label><br>
+        <input type="text" id="name" name="name" required><br><br>
+
+        <label for="phone">Telefon:</label><br>
+        <input type="tel" id="phone" name="phone" required><br><br>
+
+        <label for="age">Életkor:</label><br>
+        <input type="number" id="age" name="age" min="0" required><br><br>
+
+        <label for="comments">Megjegyzés:</label><br>
+        <textarea id="comments" name="comments" rows="4" cols="50"></textarea><br><br>
+
+        <button type="submit">Küldés</button>
+    </form>
+</body>
+</html>
