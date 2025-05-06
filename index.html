@@ -4,23 +4,152 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Regisztráció</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f8ff;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        h1 {
+            color: #0056b3;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        form {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 100%;
+        }
+
+        label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        input, textarea, button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        .radio-group {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+
+        button {
+            background-color: #0056b3;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #003d80;
+        }
+
+        @media (max-width: 600px) {
+            form {
+                padding: 15px;
+            }
+
+            input, textarea, button {
+                font-size: 14px;
+            }
+        }
+    </style>
 </head>
 <body>
     <h1>Regisztrációs űrlap</h1>
-    <form action="/submit" method="post">
-        <label for="name">Név:</label><br>
-        <input type="text" id="name" name="name" required><br><br>
+    <form id="registrationForm" action="/submit" method="post" onsubmit="return validateForm()">
+        <label for="name">Név:</label>
+        <input type="text" id="name" name="name" minlength="10" required>
 
-        <label for="phone">Telefon:</label><br>
-        <input type="tel" id="phone" name="phone" required><br><br>
+        <label for="email">E-mail:</label>
+        <input type="email" id="email" name="email" required>
 
-        <label for="age">Életkor:</label><br>
-        <input type="number" id="age" name="age" min="0" required><br><br>
+        <label for="phone">Telefon:</label>
+        <input type="tel" id="phone" name="phone" pattern="^\+?[0-9]+$" required>
 
-        <label for="comments">Megjegyzés:</label><br>
-        <textarea id="comments" name="comments" rows="4" cols="50"></textarea><br><br>
+        <label for="age">Életkor:</label>
+        <input type="number" id="age" name="age" min="0" max="99" step="1" required>
+
+        <label for="gender">Nem:</label>
+        <div class="radio-group">
+            <label><input type="radio" id="male" name="gender" value="male" required> Férfi</label>
+            <label><input type="radio" id="female" name="gender" value="female" required> Nő</label>
+        </div>
+
+        <label for="comments">Megjegyzés:</label>
+        <textarea id="comments" name="comments" rows="4" cols="50" minlength="10" required></textarea>
 
         <button type="submit">Küldés</button>
     </form>
+
+    <script>
+        function validateForm() {
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+            const age = document.getElementById('age').value;
+            const comments = document.getElementById('comments').value;
+            const gender = document.querySelector('input[name="gender"]:checked');
+
+            if (name.length < 10) {
+                alert('A névnek legalább 10 karakter hosszúnak kell lennie!');
+                return false;
+            }
+
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailPattern.test(email)) {
+                alert('Kérjük, adjon meg egy érvényes e-mail címet!');
+                return false;
+            }
+
+            const phonePattern = /^\+?[0-9]+$/;
+            if (!phonePattern.test(phone)) {
+                alert('A telefonszám csak számokat és opcionálisan "+" jelet tartalmazhat!');
+                return false;
+            }
+
+            if (age < 0 || age > 99) {
+                alert('Az életkornak 0 és 99 között kell lennie!');
+                return false;
+            }
+
+            if (!gender) {
+                alert('Kérjük, válassza ki a nemét!');
+                return false;
+            }
+
+            if (comments.length < 10) {
+                alert('A megjegyzésnek legalább 10 karakter hosszúnak kell lennie!');
+                return false;
+            }
+
+            // Ha minden adat helyes
+            alert('Köszönjük a regisztrációt!');
+            document.getElementById('registrationForm').reset(); // Az űrlap alaphelyzetbe állítása
+            return false; // Megakadályozza az űrlap tényleges elküldését
+        }
+    </script>
 </body>
 </html>
